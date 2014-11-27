@@ -82,6 +82,9 @@ void				recursive(char *path, t_file *list, int options, int nb_dir)
 	i = -1;
 	while (++i < nb_dir)
 	{
+		ft_putchar('\n');
+		ft_putstr(ft_strjoin(path, all_dir[i]));
+		ft_putstr(":\n");
 		browse(ft_strjoin(path, slash(all_dir[i])), options);
 	}
 }
@@ -101,10 +104,10 @@ int					browse(char *path, int options)
 		list = save_infos(file->d_name, list, ft_strjoin(path, file->d_name));
 		file = readdir(ret);
 	}
-	if (options & 0b01000)
-		recursive(path, list, options, count_dir(list));
 	if (list != NULL)
 		print(list, options, path);
+	if (options & 0b01000)
+		recursive(path, list, options, count_dir(list));
 	return (1);
 }
 

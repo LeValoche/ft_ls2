@@ -48,7 +48,10 @@ void		print(t_file *list, int options, char *path)
 {
 	while (list != NULL)
 	{
-		ft_putendl(ft_strjoin(path, list->name));
+		if (options & 0b00100 && list->name[0] == '.')
+			ft_putendl(ft_strjoin(path, list->name));
+		else if (list->name[0] != '.')
+			ft_putendl(list->name);
 		list = list->next;
 	}
 }
