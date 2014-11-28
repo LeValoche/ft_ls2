@@ -44,5 +44,8 @@ char				*rights(struct stat *st);
 char				*slash(char *str);
 void				recursive(char *path, t_file *list, int options, int nb_dir);
 void				print(t_file *list, int options, char *path);
+t_file				*sort_t(t_file *file);
+int					ex_2to3(t_file *ptr1, t_file *ptr2, t_file *ptr3);
+int					ex_1to2(t_file *file, t_file *ptr1, t_file *ptr2, t_file *ptr3);
 
 #endif

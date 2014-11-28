@@ -46,12 +46,17 @@ char		*slash(char *str)
 
 void		print(t_file *list, int options, char *path)
 {
+	//list = sort_t(list);
 	while (list != NULL)
 	{
 		if (options & 0b00100 && list->name[0] == '.')
-			ft_putendl(ft_strjoin(path, list->name));
-		else if (list->name[0] != '.')
 			ft_putendl(list->name);
+		else if (list->name[0] != '.')
+		{
+			ft_putendl(list->name);
+			ft_putnbr(list->last_modif);
+			ft_putchar('\n');
+		}
 		list = list->next;
 	}
 }

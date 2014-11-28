@@ -28,7 +28,6 @@ t_file				*save_infos(char *name_file, t_file *first, char *path)
 		tmp->links = st.st_nlink;
 		tmp->user = ft_strdup(getpwuid(st.st_uid)->pw_name);
 		tmp->group = ft_strdup(getgrgid(st.st_gid)->gr_name);
-		tmp->links = st.st_nlink;
 		tmp->last_modif = (long long)st.st_mtime;
 		tmp->is_dir = (tmp->rights[0] == 'd' && ( ft_strcmp(tmp->name, "..") != 0 && ft_strcmp(tmp->name, ".") != 0));
 		tmp->next = NULL;
