@@ -11,42 +11,63 @@
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+t_file		*ft_lstswitch(t_file *l1, t_file *l2)
+{
+	l1->next = l2->next;
+	l2->next = l1;
+	return (l2);
+}
+
 /*
 t_file		*sort_r(t_list *file)
 {
 
 }
 */
-t_file		*sort_t(t_file *file)
+t_file		*time_sort(t_file *file)
 {
-	int		end;
-	t_file	*ptr1;
-	t_file	*ptr2;
-	t_file	*ptr3;
-
-	end = 0;
-	ptr1 = file;
-	ptr2 = ptr1->next;
-	ptr3 = ptr2->next;
-	while (!end)
+	if (file == NULL)
+		return (NULL);
+	if (file->next != NULL && file->last_modif < file->next->last_modif)
+		file = ft_lstswitch(file, file->next);
+	file->next = time_sort(file->next);
+	if (file->next != NULL && file->last_modif < file->next->last_modif)
 	{
-		end = 0;
-		end += ex_1to2(file, ptr1, ptr2, ptr3);
-		end += ex_2to3(ptr1, ptr2, ptr3);
-		if (ptr3->next == NULL)
-		{
-			ptr1 = file;
-			ptr2 = ptr1->next;
-			ptr3 = ptr2->next;
-		}
-		else
-		{
-			ptr1 = ptr2;
-			ptr2 = ptr3;
-			ptr3 = ptr3->next;
-		}
+		file = ft_lstswitch(file, file->next);
+		file->next = time_sort(file->next);
 	}
 	return (file);
+}
+
+t_file		*rev_sort(t_file *file)
+{
+	if (file == NULL)
+		return (NULL);
+	if (file->next != NULL && file->count < file->next->count)
+		file = ft_lstswitch(file, file->next);
+	file->next = rev_sort(file->next);
+	if (file->next != NULL && file->count < file->next->count)
+	{
+		file = ft_lstswitch(file, file->next);
+		file->next = rev_sort(file->next);
+	}
+	return (file);
+}
+
+int			is_check(t_file *file)
+{
+	t_file	*tmp;
+
+	tmp = file->next;
+	while (tmp->next != NULL)
+	{
+		if (file->last_modif > tmp->last_modif)
+			return (0);
+		tmp = tmp->next;
+		file = file->next;
+	}
+	return (1);
 }
 /*
 t_file		*sort_ascii(t_list *file)
@@ -54,26 +75,3 @@ t_file		*sort_ascii(t_list *file)
 
 }
 */
-int			ex_2to3(t_file *ptr1, t_file *ptr2, t_file *ptr3)
-{
-	if (ptr2->last_modif > ptr3->last_modif)
-	{
-		ptr1->next = ptr3;
-		ptr2->next = ptr3->next;
-		ptr3->next = ptr2;
-		return (1);
-	}	
-	return (0);
-}
-
-int			ex_1to2(t_file *file, t_file *ptr1, t_file *ptr2, t_file *ptr3)
-{
-	if (ptr1 == file && ptr1->last_modif > ptr2->last_modif)
-	{
-		file = ptr2;
-		ptr1->next = ptr3;
-		ptr2->next = ptr1;
-		return (1);
-	}
-	return (0);
-}

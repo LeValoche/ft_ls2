@@ -46,17 +46,21 @@ char		*slash(char *str)
 
 void		print(t_file *list, int options, char *path)
 {
-	//list = sort_t(list);
+	ft_putendl("--------------");
+	ft_putendl(path);
+	ft_putendl(get_dir(path));
+	ft_putendl("--------------\n");
+	if (options & 0b00001)
+		list = time_sort(list);
+	list = set_index(list);
+	if (options & 0b00010)
+		list = rev_sort(list);
 	while (list != NULL)
 	{
 		if (options & 0b00100 && list->name[0] == '.')
 			ft_putendl(list->name);
 		else if (list->name[0] != '.')
-		{
 			ft_putendl(list->name);
-			ft_putnbr(list->last_modif);
-			ft_putchar('\n');
-		}
 		list = list->next;
 	}
 }
@@ -73,4 +77,20 @@ int			count_dir(t_file *list)
 		list = list->next;
 	}
 	return (i);
+}
+
+t_file		*set_index(t_file *file)
+{
+	t_file	*first;
+	int		i;
+
+	first = file;
+	i = 0;
+	while (file != NULL)
+	{
+		file->count = i;
+		i++;
+		file = file->next;
+	}
+	return (first);
 }

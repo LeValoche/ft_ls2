@@ -17,6 +17,7 @@ t_file				*save_infos(char *name_file, t_file *first, char *path)
 	struct stat		st;
 	t_file			*tmp;
 	t_file			*mover;
+	static int		i;
 
 	tmp = (t_file *)malloc(sizeof(t_file));
 	mover = first;
@@ -30,6 +31,7 @@ t_file				*save_infos(char *name_file, t_file *first, char *path)
 		tmp->group = ft_strdup(getgrgid(st.st_gid)->gr_name);
 		tmp->last_modif = (long long)st.st_mtime;
 		tmp->is_dir = (tmp->rights[0] == 'd' && ( ft_strcmp(tmp->name, "..") != 0 && ft_strcmp(tmp->name, ".") != 0));
+		tmp->count = i++;
 		tmp->next = NULL;
 	}
 	if (first == NULL)
@@ -81,9 +83,18 @@ void				recursive(char *path, t_file *list, int options, int nb_dir)
 	i = -1;
 	while (++i < nb_dir)
 	{
-		ft_putchar('\n');
-		ft_putstr(ft_strjoin(path, all_dir[i]));
-		ft_putstr(":\n");
+		if (options & 0b00100 && all_dir[i][0] == '.')
+		{
+			ft_putchar('\n');
+			ft_putstr(ft_strjoin(path, all_dir[i]));
+			ft_putstr(":\n");
+		}
+		else if (all_dir[i][0] != '.')
+		{
+			//ft_putchar('\n');
+			//ft_putstr(ft_strjoin(path, all_dir[i]));
+			//ft_putstr(":\n");
+		}
 		browse(ft_strjoin(path, slash(all_dir[i])), options);
 	}
 }
