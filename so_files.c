@@ -12,10 +12,10 @@
 
 #include "ft_ls.h"
 
-char		*get_dir(char *str)
+char			*get_dir(char *str)
 {
-	int		len;
-	int		i;
+	int			len;
+	int			i;
 
 	len = ft_strlen(str) - 1;
 	i = 0;
@@ -36,9 +36,9 @@ char		*get_dir(char *str)
 		return (str);
 }
 
-int			inv_dir(char *dir)
+int				inv_dir(char *dir)
 {
-	int		i;
+	int			i;
 
 	i = ft_strlen(dir);
 	if (dir[0] == '.' && i == 2)
@@ -48,4 +48,49 @@ int			inv_dir(char *dir)
 	else if (dir[0] != '.')
 		return (1);
 	return (0);
+}
+
+t_file			*print_l(t_file *list, int options, char *path)
+{
+	t_file	*first;
+
+	first = list;
+	while (list != NULL)
+	{
+		if (options & 0b00100)
+			print_everything(list);
+		else if (list->name[0] != '.' && inv_dir(get_dir(path)))
+			print_everything(list);
+		list = list->next;
+	}
+	return (first);
+}
+
+void			print_everything(t_file *list)
+{
+	ft_putstr(list->rights);
+	ft_putstr(" ");
+	ft_putnbr(list->links);
+	ft_putstr(" ");
+	ft_putstr(list->user);
+	ft_putstr(" ");
+	ft_putstr(list->group);
+	ft_putstr(" ");
+	ft_putnbr(list->size);
+	ft_putstr(" ");
+	print_date(ctime(&(list->creation)));
+	ft_putstr(" ");
+	ft_putendl(list->name);
+}
+
+void		print_date(char *str)
+{
+	int		i;
+
+	i = 4;
+	while (str[i + 9] != '\0')
+	{
+		ft_putchar(str[i]);
+		i++;
+	}
 }

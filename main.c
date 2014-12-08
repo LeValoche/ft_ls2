@@ -21,7 +21,7 @@ t_file				*save_infos(char *name_file, t_file *first, char *path)
 
 	tmp = (t_file *)malloc(sizeof(t_file));
 	mover = first;
-	if (stat(path, &st) == 0)
+	if (lstat(path, &st) == 0)
 	{
 		tmp->rights = rights(&st);
 		tmp->name = ft_strdup(name_file);
@@ -30,6 +30,7 @@ t_file				*save_infos(char *name_file, t_file *first, char *path)
 		tmp->user = ft_strdup(getpwuid(st.st_uid)->pw_name);
 		tmp->group = ft_strdup(getgrgid(st.st_gid)->gr_name);
 		tmp->last_modif = (long long)st.st_mtime;
+		tmp->creation = st.st_mtime;
 		tmp->is_dir = (tmp->rights[0] == 'd' && REAL_DIR(tmp->name));
 		tmp->next = NULL;
 	}

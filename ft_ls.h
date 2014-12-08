@@ -33,6 +33,7 @@ typedef struct		s_file
 	size_t			size;
 	char			*name;
 	long long		last_modif;
+	time_t			creation;
 	int				is_dir;
 	int				count;
 	struct s_file	*next;
@@ -52,5 +53,8 @@ t_file				*rev_sort(t_file *file);
 t_file				*set_index(t_file *file);
 char				*get_dir(char *str);
 int					inv_dir(char *dir);
+t_file				*print_l(t_file *list, int options, char *path);
+void				print_everything(t_file *list);
+void				print_date(char *str);
 
 #endif
