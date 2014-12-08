@@ -80,7 +80,7 @@ void			print_everything(t_file *list)
 	ft_putstr(" ");
 	print_date(ctime(&(list->creation)));
 	ft_putstr(" ");
-	ft_putendl(list->name);
+	ft_putendl(list->name); 
 }
 
 void		print_date(char *str)
