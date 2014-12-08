@@ -44,25 +44,20 @@ char		*slash(char *str)
 	return (str);
 }
 
-void		print(t_file *list, int options, char *path)
+t_file		*print(t_file *list, int options, char *path)
 {
-	ft_putendl("--------------");
-	ft_putendl(path);
-	ft_putendl(get_dir(path));
-	ft_putendl("--------------\n");
-	if (options & 0b00001)
-		list = time_sort(list);
-	list = set_index(list);
-	if (options & 0b00010)
-		list = rev_sort(list);
+	t_file	*first;
+
+	first = list;
 	while (list != NULL)
 	{
-		if (options & 0b00100 && list->name[0] == '.')
+		if (options & 0b00100)
 			ft_putendl(list->name);
-		else if (list->name[0] != '.')
+		else if (list->name[0] != '.' && inv_dir(get_dir(path)))
 			ft_putendl(list->name);
 		list = list->next;
 	}
+	return (first);
 }
 
 int			count_dir(t_file *list)

@@ -12,6 +12,7 @@
 
 #ifndef FT_LS_H
 # define FT_LS_H
+# define REAL_DIR(x) (ft_strcmp(x, "..") != 0 && ft_strcmp(x, ".") != 0)
 # include <dirent.h>
 # include <stdio.h>
 # include <sys/stat.h>
@@ -44,11 +45,12 @@ int					main(int argc, char **argv);
 char				*rights(struct stat *st);
 char				*slash(char *str);
 void				recursive(char *path, t_file *list, int options, int nb_dir);
-void				print(t_file *list, int options, char *path);
+t_file				*print(t_file *list, int options, char *path);
 t_file				*ft_lstswitch(t_file *l1, t_file *l2);
 t_file				*time_sort(t_file *file);
 t_file				*rev_sort(t_file *file);
 t_file				*set_index(t_file *file);
 char				*get_dir(char *str);
+int					inv_dir(char *dir);
 
 #endif

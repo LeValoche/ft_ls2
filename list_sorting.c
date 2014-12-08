@@ -19,12 +19,6 @@ t_file		*ft_lstswitch(t_file *l1, t_file *l2)
 	return (l2);
 }
 
-/*
-t_file		*sort_r(t_list *file)
-{
-
-}
-*/
 t_file		*time_sort(t_file *file)
 {
 	if (file == NULL)
@@ -69,9 +63,3 @@ int			is_check(t_file *file)
 	}
 	return (1);
 }
-/*
-t_file		*sort_ascii(t_list *file)
-{
-
-}
-*/

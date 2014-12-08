@@ -30,8 +30,7 @@ t_file				*save_infos(char *name_file, t_file *first, char *path)
 		tmp->user = ft_strdup(getpwuid(st.st_uid)->pw_name);
 		tmp->group = ft_strdup(getgrgid(st.st_gid)->gr_name);
 		tmp->last_modif = (long long)st.st_mtime;
-		tmp->is_dir = (tmp->rights[0] == 'd' && ( ft_strcmp(tmp->name, "..") != 0 && ft_strcmp(tmp->name, ".") != 0));
-		tmp->count = i++;
+		tmp->is_dir = (tmp->rights[0] == 'd' && REAL_DIR(tmp->name));
 		tmp->next = NULL;
 	}
 	if (first == NULL)
@@ -91,9 +90,9 @@ void				recursive(char *path, t_file *list, int options, int nb_dir)
 		}
 		else if (all_dir[i][0] != '.')
 		{
-			//ft_putchar('\n');
-			//ft_putstr(ft_strjoin(path, all_dir[i]));
-			//ft_putstr(":\n");
+			ft_putchar('\n');
+			ft_putstr(ft_strjoin(path, all_dir[i]));
+			ft_putstr(":\n");
 		}
 		browse(ft_strjoin(path, slash(all_dir[i])), options);
 	}
@@ -114,8 +113,15 @@ int					browse(char *path, int options)
 		list = save_infos(file->d_name, list, ft_strjoin(path, file->d_name));
 		file = readdir(ret);
 	}
-	if (list != NULL)
-		print(list, options, path);
+	if (options & 0b00001)
+		list = time_sort(list);
+	list = set_index(list);
+	if (options & 0b00010)
+		list = rev_sort(list);
+	if (list != NULL && options & 0b10000)
+		list = print_l(list, options, path);
+	else if (list != NULL)
+		list = print(list, options, path);
 	if (options & 0b01000)
 		recursive(path, list, options, count_dir(list));
 	return (1);
