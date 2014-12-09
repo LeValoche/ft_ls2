@@ -31,3 +31,19 @@ void			print_date2(char *str)
 		i++;
 	}
 }
+
+int				count_total(t_file *list)
+{
+	int			result;
+	int			rest;
+
+	result = 0;
+	rest = 0;
+	while (list != NULL)
+	{
+		result += (list->size + rest) / 512;
+		rest = (list->size + rest) % 512;
+		list = list->next;
+	}
+	return (result);
+}

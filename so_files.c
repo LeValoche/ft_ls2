@@ -64,6 +64,9 @@ t_file			*print_l(t_file *list, int options, char *path)
 	g_user = max_user(list);
 	g_group = max_group(list);
 	first = list;
+	ft_putstr("total ");
+	ft_putnbr(count_total(list));
+	ft_putendl("");
 	while (list != NULL)
 	{
 		if (options & 0b00100)
