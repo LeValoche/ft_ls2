@@ -56,5 +56,12 @@ int					inv_dir(char *dir);
 t_file				*print_l(t_file *list, int options, char *path);
 void				print_everything(t_file *list);
 void				print_date(char *str);
+void				print_date2(char *str);
+int					max_size(t_file *list);
+int					max_group(t_file *list);
+int					max_user(t_file *list);
+int					max_links(t_file *list);
+void				print_spaces(int n);
+t_file				*ascii_sort(t_file *file);
 
 #endif

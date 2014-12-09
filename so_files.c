@@ -12,6 +12,11 @@
 
 #include "ft_ls.h"
 
+int				g_size;
+int				g_links;
+int				g_user;
+int				g_group;
+
 char			*get_dir(char *str)
 {
 	int			len;
@@ -52,8 +57,12 @@ int				inv_dir(char *dir)
 
 t_file			*print_l(t_file *list, int options, char *path)
 {
-	t_file	*first;
+	t_file		*first;
 
+	g_size = max_size(list);
+	g_links = max_links(list);
+	g_user = max_user(list);
+	g_group = max_group(list);
 	first = list;
 	while (list != NULL)
 	{
@@ -68,24 +77,32 @@ t_file			*print_l(t_file *list, int options, char *path)
 
 void			print_everything(t_file *list)
 {
+	time_t		tloc;
+
+	time(&tloc);
 	ft_putstr(list->rights);
-	ft_putstr(" ");
+	print_spaces(g_links - ft_intlen(list->links));
 	ft_putnbr(list->links);
-	ft_putstr(" ");
+	ft_putchar(' ');
 	ft_putstr(list->user);
-	ft_putstr(" ");
+	print_spaces(g_user - ft_strlen(list->user));
+	ft_putchar(' ');
 	ft_putstr(list->group);
-	ft_putstr(" ");
+	print_spaces(g_group - ft_strlen(list->group));
+	print_spaces(g_size - ft_intlen(list->size));
 	ft_putnbr(list->size);
 	ft_putstr(" ");
-	print_date(ctime(&(list->creation)));
+	if (list->creation + 15778800 > tloc && list->creation < tloc)
+		print_date(ctime(&(list->creation)));
+	else
+		print_date2(ctime(&(list->creation)));
 	ft_putstr(" ");
-	ft_putendl(list->name); 
+	ft_putendl(list->name);
 }
 
-void		print_date(char *str)
+void			print_date(char *str)
 {
-	int		i;
+	int			i;
 
 	i = 4;
 	while (str[i + 9] != '\0')

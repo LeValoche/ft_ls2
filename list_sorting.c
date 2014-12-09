@@ -49,6 +49,21 @@ t_file		*rev_sort(t_file *file)
 	return (file);
 }
 
+t_file		*ascii_sort(t_file *file)
+{
+	if (file == NULL)
+		return (NULL);
+	if (file->next != NULL && ft_strcmp(file->name, file->next->name) > 0)
+		file = ft_lstswitch(file, file->next);
+	file->next = ascii_sort(file->next);
+	if (file->next != NULL && ft_strcmp(file->name, file->next->name) > 0)
+	{
+		file = ft_lstswitch(file, file->next);
+		file->next = ascii_sort(file->next);
+	}
+	return (file);
+}
+
 int			is_check(t_file *file)
 {
 	t_file	*tmp;

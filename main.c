@@ -114,6 +114,7 @@ int					browse(char *path, int options)
 		list = save_infos(file->d_name, list, ft_strjoin(path, file->d_name));
 		file = readdir(ret);
 	}
+	list = ascii_sort(list);
 	if (options & 0b00001)
 		list = time_sort(list);
 	list = set_index(list);
