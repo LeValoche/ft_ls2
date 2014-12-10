@@ -41,9 +41,21 @@ int				count_total(t_file *list)
 	rest = 0;
 	while (list != NULL)
 	{
-		result += (list->size + rest) / 512;
-		rest = (list->size + rest) % 512;
+		if (ft_strcmp(list->name, ".") != 0 && ft_strcmp(list->name, "..") != 0)
+		{
+			result += (list->size + rest) / 512;
+			rest = (list->size + rest) % 512;
+		}
 		list = list->next;
 	}
 	return (result);
+}
+
+char			*rem_slash(char *str)
+{
+	int			len;
+
+	len = ft_strlen(str);
+	str[len - 1] = '\0';
+	return (str);
 }

@@ -44,28 +44,29 @@ t_file				*save_infos(char *name_file, t_file *first, char *path)
 int					ft_options(char *input)
 {
 	int				options;
+	int				i;
 
 	options = 0b00000;
-	while (*input++)
+	i = 0;
+	while (input[++i] != '\0')
 	{
-		if (*input == 't')
+		if (input[i] == 't')
 			options = options | 0b00001;
-		else if (*input == 'r')
+		else if (input[i] == 'r')
 			options = options | 0b00010;
-		else if (*input == 'a')
+		else if (input[i] == 'a')
 			options = options | 0b00100;
-		else if (*input == 'R')
+		else if (input[i] == 'R')
 			options = options | 0b01000;
-		else if (*input == 'l')
+		else if (input[i] == 'l')
 			options = options | 0b10000;
-		/*else
+		else
 		{
 			ft_putstr("ls: illegal option -- ");
-			ft_putchar(*input);
-			ft_putstr("\nusage: ls [-ABCFGHLOPRSTUWabcdefghiklmnop");
-			ft_putstr("qrstuwx1] [file ...]\n");
+			ft_putchar(input[i]);
+			ft_putstr("\nusage: ls [-Ralrt] [file ...]\n");
 			exit(1);
-		}*/
+		}
 	}
 	return (options);
 }
@@ -114,6 +115,9 @@ int					browse(char *path, int options)
 
 	if ((ret = opendir(path)) == NULL)
 	{
+		ft_putstr("ls: ");
+		ft_putstr(rem_slash(path));
+		ft_putstr(": ");
 		perror("Error");
 		exit(1);
 	}
@@ -152,7 +156,7 @@ int					main(int argc, char **argv)
 	while (++i < argc)
 	{
 		if (argv[i][0] == '-')
-			options = options | ft_options(argv[i]++);
+			options = options | ft_options(argv[i]);
 		else
 		{
 			path = argv[i];

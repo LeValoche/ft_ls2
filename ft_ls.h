@@ -64,5 +64,6 @@ int					max_links(t_file *list);
 void				print_spaces(int n);
 t_file				*ascii_sort(t_file *file);
 int					count_total(t_file *list);
+char				*rem_slash(char *str);
 
 #endif
