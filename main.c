@@ -17,7 +17,6 @@ t_file				*save_infos(char *name_file, t_file *first, char *path)
 	struct stat		st;
 	t_file			*tmp;
 	t_file			*mover;
-	static int		i;
 
 	tmp = (t_file *)malloc(sizeof(t_file));
 	mover = first;
@@ -59,6 +58,14 @@ int					ft_options(char *input)
 			options = options | 0b01000;
 		else if (*input == 'l')
 			options = options | 0b10000;
+		/*else
+		{
+			ft_putstr("ls: illegal option -- ");
+			ft_putchar(*input);
+			ft_putstr("\nusage: ls [-ABCFGHLOPRSTUWabcdefghiklmnop");
+			ft_putstr("qrstuwx1] [file ...]\n");
+			exit(1);
+		}*/
 	}
 	return (options);
 }
@@ -105,7 +112,11 @@ int					browse(char *path, int options)
 	struct dirent	*file;
 	t_file			*list;
 
-	ret = opendir(path);
+	if ((ret = opendir(path)) == NULL)
+	{
+		perror("Error");
+		exit(1);
+	}
 	file = readdir(ret);
 	list = (t_file *)malloc(sizeof(t_file));
 	list = NULL;
