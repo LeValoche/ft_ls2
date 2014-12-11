@@ -118,7 +118,7 @@ int					browse(char *path, int options)
 		ft_putstr("ls: ");
 		ft_putstr(rem_slash(path));
 		ft_putstr(": ");
-		perror("Error");
+		perror("");
 		return (0);
 	}
 	file = readdir(ret);
