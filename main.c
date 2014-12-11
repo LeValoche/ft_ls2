@@ -119,7 +119,7 @@ int					browse(char *path, int options)
 		ft_putstr(rem_slash(path));
 		ft_putstr(": ");
 		perror("Error");
-		exit(1);
+		return (0);
 	}
 	file = readdir(ret);
 	list = (t_file *)malloc(sizeof(t_file));
