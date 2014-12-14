@@ -19,7 +19,20 @@ char		*rights(struct stat *st)
 
 	result[10] = '\0';
 	i = -1;
-	result[++i] = (S_ISDIR(st->st_mode)) ? 'd' : '-';
+	if (S_ISDIR(st->st_mode))
+		result[++i] = 'd';
+	else if (S_ISBLK(st->st_mode))
+		result[++i] = 'b';
+	else if (S_ISCHR(st->st_mode))
+		result[++i] = 'c';
+	else if (S_ISLNK(st->st_mode))
+		result[++i] = 'l';
+	else if (S_ISFIFO(st->st_mode))
+		result[++i] = 'p';
+	else if (S_ISSOCK(st->st_mode))
+		result[++i] = 's';
+	else
+		result[++i] = '-';
 	result[++i] = (st->st_mode & S_IRUSR) ? 'r' : '-';
 	result[++i] = (st->st_mode & S_IWUSR) ? 'w' : '-';
 	result[++i] = (st->st_mode & S_IXUSR) ? 'x' : '-';

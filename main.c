@@ -116,7 +116,7 @@ int					browse(char *path, int options)
 	if ((ret = opendir(path)) == NULL)
 	{
 		ft_putstr("ls: ");
-		ft_putstr(rem_slash(path));
+		ft_putstr(rem_slash(get_dir(path)));
 		ft_putstr(": ");
 		perror("");
 		return (0);
