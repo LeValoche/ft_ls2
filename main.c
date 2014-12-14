@@ -116,9 +116,7 @@ int					browse(char *path, int options)
 	if ((ret = opendir(path)) == NULL)
 	{
 		ft_putstr("ls: ");
-		ft_putstr(rem_slash(get_dir(path)));
-		ft_putstr(": ");
-		perror("");
+		perror(rem_slash(get_dir(path)));
 		return (0);
 	}
 	file = readdir(ret);
@@ -129,6 +127,7 @@ int					browse(char *path, int options)
 		list = save_infos(file->d_name, list, ft_strjoin(path, file->d_name));
 		file = readdir(ret);
 	}
+	closedir(ret);
 	list = ascii_sort(list);
 	if (options & 0b00001)
 		list = time_sort(list);
