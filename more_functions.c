@@ -64,7 +64,16 @@ t_file		*print(t_file *list, int options, char *path)
 	first = list;
 	while (list != NULL)
 	{
-		if (options & 0b00100)
+		if (list->user[0] == '\0' || list->group[0] == '\0')
+		{
+			if (list->name[0] != '.' && options & 0b00100)
+			{
+				ft_putstr("ft_ls: ");
+				ft_putstr(list->name);
+				ft_putendl(": Permision denied");
+			}
+		}
+		else if (options & 0b00100)
 			ft_putendl(list->name);
 		else if (list->name[0] != '.' && inv_dir(get_dir(path)))
 			ft_putendl(list->name);

@@ -1,55 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   even_moar.c                                        :+:      :+:    :+:   */
+/*   last_one.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vcohere <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/12/09 16:15:22 by vcohere           #+#    #+#             */
-/*   Updated: 2014/12/09 16:15:24 by vcohere          ###   ########.fr       */
+/*   Created: 2014/12/15 11:22:37 by vcohere           #+#    #+#             */
+/*   Updated: 2014/12/15 11:22:39 by vcohere          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void			print_date2(char *str)
+int		max_major(t_file *list)
 {
-	int			i;
-	int			j;
+	int	tmp;
 
-	i = 4;
-	j = ft_strlen(str) - 5;
-	while (str[i + 14] != '\0')
-	{
-		ft_putchar(str[i]);
-		i++;
-	}
-	i = ft_strlen(str) - 6;
-	while (str[i] != '\n')
-	{
-		ft_putchar(str[i]);
-		i++;
-	}
-}
-
-int				count_total(t_file *list)
-{
-	int			result;
-
-	result = 0;
+	tmp = 0;
 	while (list != NULL)
 	{
-		result += list->blocks;
+		if (ft_intlen(list->size) > tmp)
+			tmp = ft_intlen(list->size);
 		list = list->next;
 	}
-	return (result);
+	return (tmp);
 }
 
-char			*rem_slash(char *str)
+int		max_minor(t_file *list)
 {
-	int			len;
+	int	tmp;
 
-	len = ft_strlen(str);
-	str[len - 1] = '\0';
-	return (str);
+	tmp = 0;
+	while (list != NULL)
+	{
+		if (ft_intlen(list->size) > tmp)
+			tmp = ft_intlen(list->size);
+		list = list->next;
+	}
+	return (tmp);
 }

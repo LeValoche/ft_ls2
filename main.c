@@ -20,17 +20,24 @@ t_file				*save_infos(char *name_file, t_file *first, char *path)
 
 	tmp = (t_file *)malloc(sizeof(t_file));
 	mover = first;
-	if (lstat(path, &st) == 0)
+	if (lstat(path, &st) <= 0)
 	{
 		tmp->rights = rights(&st);
 		tmp->name = ft_strdup(name_file);
 		tmp->size = st.st_size;
 		tmp->links = st.st_nlink;
-		tmp->user = ft_strdup(getpwuid(st.st_uid)->pw_name);
-		tmp->group = ft_strdup(getgrgid(st.st_gid)->gr_name);
+		if (getpwuid(st.st_uid) != NULL)
+			tmp->user = ft_strdup(getpwuid(st.st_uid)->pw_name);
+		else
+			tmp->user = ft_strdup("");
+		if (getgrgid(st.st_gid) != NULL)
+			tmp->group = ft_strdup(getgrgid(st.st_gid)->gr_name);
+		else
+			tmp->group = ft_strdup("");
 		tmp->last_modif = (long long)st.st_mtime;
 		tmp->creation = st.st_mtime;
 		tmp->is_dir = (tmp->rights[0] == 'd' && REAL_DIR(tmp->name));
+		tmp->blocks = st.st_blocks;
 		tmp->next = NULL;
 	}
 	if (first == NULL)
@@ -62,7 +69,7 @@ int					ft_options(char *input)
 			options = options | 0b10000;
 		else
 		{
-			ft_putstr("ls: illegal option -- ");
+			ft_putstr("ft_ls: illegal option -- ");
 			ft_putchar(input[i]);
 			ft_putstr("\nusage: ls [-Ralrt] [file ...]\n");
 			exit(1);

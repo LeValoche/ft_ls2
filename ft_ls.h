@@ -16,6 +16,7 @@
 # include <dirent.h>
 # include <stdio.h>
 # include <sys/stat.h>
+# include <sys/types.h>
 # include <pwd.h>
 # include <uuid/uuid.h>
 # include <stdlib.h>
@@ -36,6 +37,7 @@ typedef struct		s_file
 	time_t			creation;
 	int				is_dir;
 	int				count;
+	int				blocks;
 	struct s_file	*next;
 }					t_file;
 

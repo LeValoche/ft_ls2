@@ -69,7 +69,16 @@ t_file			*print_l(t_file *list, int options, char *path)
 	ft_putendl("");
 	while (list != NULL)
 	{
-		if (options & 0b00100)
+		if (list->user[0] == '\0' || list->group[0] == '\0')
+		{
+			if (list->name[0] != '.' && options & 0b00100)
+			{
+				ft_putstr("ft_ls: ");
+				ft_putstr(list->name);
+				ft_putendl(": Permision denied");
+			}
+		}
+		else if (options & 0b00100)
 			print_everything(list);
 		else if (list->name[0] != '.' && inv_dir(get_dir(path)))
 			print_everything(list);
@@ -92,8 +101,15 @@ void			print_everything(t_file *list)
 	ft_putchar(' ');
 	ft_putstr(list->group);
 	print_spaces(g_group - ft_strlen(list->group));
-	print_spaces(g_size - ft_intlen(list->size));
-	ft_putnbr(list->size);
+	if (list->rights[0] == 'c')
+	{
+
+	}
+	else
+	{
+		print_spaces(g_size - ft_intlen(list->size));
+		ft_putnbr(list->size);
+	}
 	ft_putstr(" ");
 	if (list->creation + 15778800 > tloc && list->creation < tloc)
 		print_date(ctime(&(list->creation)));
