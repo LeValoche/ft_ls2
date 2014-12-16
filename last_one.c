@@ -12,30 +12,42 @@
 
 #include "ft_ls.h"
 
-int		max_major(t_file *list)
+int			max_major(t_file *list)
 {
-	int	tmp;
+	int		tmp;
 
 	tmp = 0;
 	while (list != NULL)
 	{
-		if (ft_intlen(list->size) > tmp)
-			tmp = ft_intlen(list->size);
+		if (ft_intlen(major(list->device_id)) > tmp)
+			tmp = ft_intlen(major(list->device_id));
 		list = list->next;
 	}
 	return (tmp);
 }
 
-int		max_minor(t_file *list)
+int			max_minor(t_file *list)
 {
-	int	tmp;
+	int		tmp;
 
 	tmp = 0;
 	while (list != NULL)
 	{
-		if (ft_intlen(list->size) > tmp)
-			tmp = ft_intlen(list->size);
+		if (ft_intlen(minor(list->device_id)) > tmp)
+			tmp = ft_intlen(minor(list->device_id));
 		list = list->next;
 	}
+	return (tmp);
+}
+
+t_file		*free_list(t_file *list)
+{
+	t_file	*tmp;
+
+	if (list == NULL)
+		return (NULL);
+	tmp = list->next;
+	free(list);
+	tmp = free_list(tmp);
 	return (tmp);
 }

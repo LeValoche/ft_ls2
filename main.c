@@ -38,6 +38,7 @@ t_file				*save_infos(char *name_file, t_file *first, char *path)
 		tmp->creation = st.st_mtime;
 		tmp->is_dir = (tmp->rights[0] == 'd' && REAL_DIR(tmp->name));
 		tmp->blocks = st.st_blocks;
+		tmp->device_id = st.st_rdev;
 		tmp->next = NULL;
 	}
 	if (first == NULL)
@@ -147,6 +148,7 @@ int					browse(char *path, int options)
 		list = print(list, options, path);
 	if (options & 0b01000)
 		recursive(path, list, options, count_dir(list));
+	free_list(list);
 	return (1);
 }
 

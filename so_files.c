@@ -16,6 +16,8 @@ int				g_size;
 int				g_links;
 int				g_user;
 int				g_group;
+int				g_major;
+int				g_minor;
 
 char			*get_dir(char *str)
 {
@@ -63,9 +65,11 @@ t_file			*print_l(t_file *list, int options, char *path)
 	g_links = max_links(list);
 	g_user = max_user(list);
 	g_group = max_group(list);
+	g_major = max_major(list);
+	g_minor = max_minor(list);
 	first = list;
 	ft_putstr("total ");
-	ft_putnbr(count_total(list));
+	ft_putnbr(count_total(list, options & 0b00100));
 	ft_putendl("");
 	while (list != NULL)
 	{
@@ -79,17 +83,19 @@ t_file			*print_l(t_file *list, int options, char *path)
 			}
 		}
 		else if (options & 0b00100)
-			print_everything(list);
+			print_everything(list, path);
 		else if (list->name[0] != '.' && inv_dir(get_dir(path)))
-			print_everything(list);
+			print_everything(list, path);
 		list = list->next;
 	}
 	return (first);
 }
 
-void			print_everything(t_file *list)
+void			print_everything(t_file *list, char *path)
 {
 	time_t		tloc;
+	char		buf[1024];
+	ssize_t		len;
 
 	time(&tloc);
 	ft_putstr(list->rights);
@@ -101,13 +107,23 @@ void			print_everything(t_file *list)
 	ft_putchar(' ');
 	ft_putstr(list->group);
 	print_spaces(g_group - ft_strlen(list->group));
-	if (list->rights[0] == 'c')
+	if (ft_strchr("bc", list->rights[0]))
 	{
-
+		print_spaces(g_major - ft_intlen(major(list->device_id)));
+		ft_putnbr(major(list->device_id));
+		ft_putstr(", ");
+		print_spaces(g_minor - ft_intlen(minor(list->device_id)));
+		ft_putnbr(minor(list->device_id));
 	}
 	else
 	{
-		print_spaces(g_size - ft_intlen(list->size));
+		if (g_major + g_minor + 1 > g_size)
+		{
+			ft_putendl("yolo");
+			print_spaces(g_major + g_minor - ft_intlen(list->size));
+		}
+		else
+			print_spaces(g_size - ft_intlen(list->size));
 		ft_putnbr(list->size);
 	}
 	ft_putstr(" ");
@@ -116,7 +132,14 @@ void			print_everything(t_file *list)
 	else
 		print_date2(ctime(&(list->creation)));
 	ft_putstr(" ");
-	ft_putendl(list->name);
+	ft_putstr(list->name);
+	if (list->rights[0] == 'l')
+	{
+		len = readlink(ft_strjoin(path, list->name), buf, len);
+		buf[len] = '\0';
+		ft_putstr(ft_strjoin(" -> ", buf));
+	}
+	ft_putendl("");
 }
 
 void			print_date(char *str)

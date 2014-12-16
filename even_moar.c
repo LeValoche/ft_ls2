@@ -32,14 +32,17 @@ void			print_date2(char *str)
 	}
 }
 
-int				count_total(t_file *list)
+int				count_total(t_file *list, int a)
 {
 	int			result;
 
 	result = 0;
 	while (list != NULL)
 	{
-		result += list->blocks;
+		if (a)
+			result += list->blocks;
+		else if (list->name[0] != '.')
+			result += list->blocks;
 		list = list->next;
 	}
 	return (result);

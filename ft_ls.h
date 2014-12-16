@@ -38,6 +38,7 @@ typedef struct		s_file
 	int				is_dir;
 	int				count;
 	int				blocks;
+	dev_t			device_id;
 	struct s_file	*next;
 }					t_file;
 
@@ -56,16 +57,20 @@ t_file				*set_index(t_file *file);
 char				*get_dir(char *str);
 int					inv_dir(char *dir);
 t_file				*print_l(t_file *list, int options, char *path);
-void				print_everything(t_file *list);
+void				print_everything(t_file *list, char *path);
 void				print_date(char *str);
 void				print_date2(char *str);
 int					max_size(t_file *list);
 int					max_group(t_file *list);
 int					max_user(t_file *list);
 int					max_links(t_file *list);
+int					max_minor(t_file *list);
+int					max_major(t_file *list);
 void				print_spaces(int n);
 t_file				*ascii_sort(t_file *file);
-int					count_total(t_file *list);
+int					count_total(t_file *list, int invisible);
 char				*rem_slash(char *str);
+t_file				*free_list(t_file *list);
+void				free_double_tab(char **tab);
 
 #endif
