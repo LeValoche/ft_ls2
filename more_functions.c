@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-char		*rights(struct stat *st)
+char		*rights(t_stat *st)
 {
 	char	result[11];
 	int		i;
@@ -33,16 +33,7 @@ char		*rights(struct stat *st)
 		result[++i] = 's';
 	else
 		result[++i] = '-';
-	result[++i] = (st->st_mode & S_IRUSR) ? 'r' : '-';
-	result[++i] = (st->st_mode & S_IWUSR) ? 'w' : '-';
-	result[++i] = (st->st_mode & S_IXUSR) ? 'x' : '-';
-	result[++i] = (st->st_mode & S_IRGRP) ? 'r' : '-';
-	result[++i] = (st->st_mode & S_IWGRP) ? 'w' : '-';
-	result[++i] = (st->st_mode & S_IXGRP) ? 'x' : '-';
-	result[++i] = (st->st_mode & S_IROTH) ? 'r' : '-';
-	result[++i] = (st->st_mode & S_IWOTH) ? 'w' : '-';
-	result[++i] = (st->st_mode & S_IXOTH) ? 'x' : '-';
-	return (ft_strdup(result));
+	return (ft_strdup(rights_two(result, i, st)));
 }
 
 char		*slash(char *str)

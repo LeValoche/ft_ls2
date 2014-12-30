@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-int			max_major(t_file *list)
+int			max_major(t_file *list, int options)
 {
 	int		tmp;
 
@@ -20,13 +20,18 @@ int			max_major(t_file *list)
 	while (list != NULL)
 	{
 		if (ft_intlen(major(list->device_id)) > tmp)
-			tmp = ft_intlen(major(list->device_id));
+		{
+			if (list->name[0] != '.')
+				tmp = ft_intlen(major(list->device_id));
+			else if (list->name[0] == '.' && options & 0b00100)
+				tmp = ft_intlen(major(list->device_id));
+		}
 		list = list->next;
 	}
 	return (tmp);
 }
 
-int			max_minor(t_file *list)
+int			max_minor(t_file *list, int options)
 {
 	int		tmp;
 
@@ -34,20 +39,44 @@ int			max_minor(t_file *list)
 	while (list != NULL)
 	{
 		if (ft_intlen(minor(list->device_id)) > tmp)
-			tmp = ft_intlen(minor(list->device_id));
+		{
+			if (list->name[0] != '.')
+				tmp = ft_intlen(minor(list->device_id));
+			else if (list->name[0] == '.' && options & 0b00100)
+				tmp = ft_intlen(minor(list->device_id));
+		}
 		list = list->next;
 	}
 	return (tmp);
 }
 
-t_file		*free_list(t_file *list)
+void		ft_putstrspace(char *str, int n)
 {
-	t_file	*tmp;
+	ft_putstr(str);
+	print_spaces(n);
+}
 
-	if (list == NULL)
-		return (NULL);
-	tmp = list->next;
-	free(list);
-	tmp = free_list(tmp);
-	return (tmp);
+int			find_majmin(t_file *list)
+{
+	while (list != NULL)
+	{
+		if (list->rights[0] == 'b' || list->rights[0] == 'c')
+			return (1);
+		list = list->next;
+	}
+	return (0);
+}
+
+int			inv_dir(char *dir)
+{
+	int		i;
+
+	i = ft_strlen(dir);
+	if (dir[0] == '.' && i == 2)
+		return (1);
+	else if (dir[0] == '.' && dir[1] == '.' && i == 3)
+		return (1);
+	else if (dir[0] != '.')
+		return (1);
+	return (0);
 }

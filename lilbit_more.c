@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-int			max_size(t_file *list)
+int			max_size(t_file *list, int options)
 {
 	int		tmp;
 
@@ -20,13 +20,18 @@ int			max_size(t_file *list)
 	while (list != NULL)
 	{
 		if (ft_intlen(list->size) > tmp)
-			tmp = ft_intlen(list->size);
+		{
+			if (list->name[0] != '.')
+				tmp = ft_intlen(list->size);
+			else if (list->name[0] == '.' && options & 0b00100)
+				tmp = ft_intlen(list->size);
+		}
 		list = list->next;
 	}
 	return (tmp);
 }
 
-int			max_links(t_file *list)
+int			max_links(t_file *list, int options)
 {
 	int		tmp;
 
@@ -34,35 +39,50 @@ int			max_links(t_file *list)
 	while (list != NULL)
 	{
 		if (ft_intlen(list->links) > tmp)
-			tmp = ft_intlen(list->links);
+		{
+			if (list->name[0] != '.')
+				tmp = ft_intlen(list->links);
+			else if (list->name[0] == '.' && options & 0b00100)
+				tmp = ft_intlen(list->links);
+		}
 		list = list->next;
 	}
 	return (tmp);
 }
 
-int			max_user(t_file *list)
+int			max_user(t_file *list, int options)
 {
 	int		tmp;
 
 	tmp = 0;
 	while (list != NULL)
 	{
-		if (ft_strlen(list->user) > tmp)
-			tmp = ft_strlen(list->user);
+		if (ft_strlen(list->user) > (size_t)tmp)
+		{
+			if (list->name[0] != '.')
+				tmp = ft_strlen(list->user);
+			else if (list->name[0] == '.' && options & 0b00100)
+				tmp = ft_strlen(list->user);
+		}
 		list = list->next;
 	}
 	return (tmp);
 }
 
-int			max_group(t_file *list)
+int			max_group(t_file *list, int options)
 {
 	int		tmp;
 
 	tmp = 0;
 	while (list != NULL)
 	{
-		if (ft_strlen(list->group) > tmp)
-			tmp = ft_strlen(list->group);
+		if (ft_strlen(list->group) > (size_t)tmp)
+		{
+			if (list->name[0] != '.')
+				tmp = ft_strlen(list->group);
+			else if (list->name[0] == '.' && options & 0b00100)
+				tmp = ft_strlen(list->group);
+		}
 		list = list->next;
 	}
 	return (tmp);

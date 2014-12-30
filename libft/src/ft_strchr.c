@@ -15,9 +15,11 @@
 char			*ft_strchr(char const *s, int c)
 {
 	char		*str;
+	int			i;
 
 	str = (char *)s;
-	while (*str++)
+	i = -1;
+	while (str[++i])
 		if (*str == c)
 			return (str);
 	return (0);

@@ -11,10 +11,12 @@
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+#define PW(x) getpwuid(x)->pw_name)
+#define GR(x) getgruid(x)->gr_name)
 
 t_file				*save_infos(char *name_file, t_file *first, char *path)
 {
-	struct stat		st;
+	t_stat			st;
 	t_file			*tmp;
 	t_file			*mover;
 
@@ -22,10 +24,7 @@ t_file				*save_infos(char *name_file, t_file *first, char *path)
 	mover = first;
 	if (lstat(path, &st) <= 0)
 	{
-		tmp->rights = rights(&st);
-		tmp->name = ft_strdup(name_file);
-		tmp->size = st.st_size;
-		tmp->links = st.st_nlink;
+		set_infos(name_file, tmp, st);
 		if (getpwuid(st.st_uid) != NULL)
 			tmp->user = ft_strdup(getpwuid(st.st_uid)->pw_name);
 		else
@@ -34,12 +33,6 @@ t_file				*save_infos(char *name_file, t_file *first, char *path)
 			tmp->group = ft_strdup(getgrgid(st.st_gid)->gr_name);
 		else
 			tmp->group = ft_strdup("");
-		tmp->last_modif = (long long)st.st_mtime;
-		tmp->creation = st.st_mtime;
-		tmp->is_dir = (tmp->rights[0] == 'd' && REAL_DIR(tmp->name));
-		tmp->blocks = st.st_blocks;
-		tmp->device_id = st.st_rdev;
-		tmp->next = NULL;
 	}
 	if (first == NULL)
 		return (tmp);
@@ -70,8 +63,7 @@ int					ft_options(char *input)
 			options = options | 0b10000;
 		else
 		{
-			ft_putstr("ft_ls: illegal option -- ");
-			ft_putchar(input[i]);
+			ft_putstrchar("ft_ls: illegal option -- ", input[i]);
 			ft_putstr("\nusage: ls [-Ralrt] [file ...]\n");
 			exit(1);
 		}
@@ -85,7 +77,8 @@ void				recursive(char *path, t_file *list, int options, int nb_dir)
 	int				i;
 
 	i = 0;
-	all_dir = (char **)malloc(sizeof(char *) * nb_dir + 1);
+	if (!(all_dir = (char **)malloc(sizeof(char *) * nb_dir + 1)))
+		exit(1);
 	all_dir[nb_dir + 1] = '\0';
 	while (list != NULL)
 	{
@@ -100,22 +93,14 @@ void				recursive(char *path, t_file *list, int options, int nb_dir)
 	while (++i < nb_dir)
 	{
 		if (options & 0b00100 && all_dir[i][0] == '.')
-		{
-			ft_putchar('\n');
-			ft_putstr(ft_strjoin(path, all_dir[i]));
-			ft_putstr(":\n");
-		}
+			ft_putcss('\n', ft_strjoin(path, all_dir[i]), ":\n");
 		else if (all_dir[i][0] != '.')
-		{
-			ft_putchar('\n');
-			ft_putstr(ft_strjoin(path, all_dir[i]));
-			ft_putstr(":\n");
-		}
+			ft_putcss('\n', ft_strjoin(path, all_dir[i]), ":\n");
 		browse(ft_strjoin(path, slash(all_dir[i])), options);
 	}
 }
 
-int					browse(char *path, int options)
+void				browse(char *path, int options)
 {
 	DIR				*ret;
 	struct dirent	*file;
@@ -125,10 +110,11 @@ int					browse(char *path, int options)
 	{
 		ft_putstr("ls: ");
 		perror(rem_slash(get_dir(path)));
-		return (0);
+		return ;
 	}
 	file = readdir(ret);
-	list = (t_file *)malloc(sizeof(t_file));
+	if (!(list = (t_file *)malloc(sizeof(t_file))))
+		exit(1);
 	list = NULL;
 	while (file)
 	{
@@ -136,20 +122,7 @@ int					browse(char *path, int options)
 		file = readdir(ret);
 	}
 	closedir(ret);
-	list = ascii_sort(list);
-	if (options & 0b00001)
-		list = time_sort(list);
-	list = set_index(list);
-	if (options & 0b00010)
-		list = rev_sort(list);
-	if (list != NULL && options & 0b10000)
-		list = print_l(list, options, path);
-	else if (list != NULL)
-		list = print(list, options, path);
-	if (options & 0b01000)
-		recursive(path, list, options, count_dir(list));
-	free_list(list);
-	return (1);
+	sort_my_tab(list, options, path);
 }
 
 int					main(int argc, char **argv)
